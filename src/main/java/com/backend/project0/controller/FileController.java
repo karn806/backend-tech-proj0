@@ -1,6 +1,8 @@
 package com.backend.project0.controller;
 
+import com.backend.project0.document.Files;
 import com.backend.project0.payload.UploadFileResponse;
+import com.backend.project0.repository.FileRepository;
 import com.backend.project0.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,17 @@ public class FileController {
 
     @Autowired
     private FileStorageService fileStorageService;
+
+    private FileRepository fileRepository;
+
+    public FileController(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
+    }
+
+    @GetMapping("/all")
+    public List<Files> getAll() {
+        return fileRepository.findAll();
+    }
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
