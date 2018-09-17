@@ -67,7 +67,7 @@ public class FileStorageService {
         //
         // Store the file to MongoDB using GRIDFS
         //
-        GridFS gridfs = new GridFS(db, "downloads");
+        GridFS gridfs = new GridFS(db, "fs");
         GridFSInputFile gfsFile = gridfs.createFile(file);
         gfsFile.setFilename(fileName);
         gfsFile.save();
@@ -78,15 +78,15 @@ public class FileStorageService {
         }
 
         //
-        BasicDBObject info = new BasicDBObject();
-        info.put("fileName", fileName);
+        BasicDBObject metaData = new BasicDBObject();
+        metaData.put("fileName", fileName);
 
-        collection.insert(info, WriteConcern.SAFE);
+        collection.insert(metaData, WriteConcern.SAFE);
 
 
         // Copy file to the target location (Replacing existing file with the same name)
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
-        Files.copy(mFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+//        Files.copy(mFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
         return fileName;
     }
