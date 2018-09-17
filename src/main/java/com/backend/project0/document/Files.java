@@ -1,34 +1,66 @@
 package com.backend.project0.document;
 
+import com.mongodb.Bytes;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "files")
 public class Files {
 
     @Id
-    private Integer id;
-    private String name;
+    private Long _id;
+    private String fileName;
+    private Integer length;
+    private Integer chunkSize;
+    private Byte data;
 
-    public Files(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+    public Files(long _id, String fileName, Integer length, Integer chunkSize, Byte data) {
+        this._id = _id;
+        this.fileName = fileName;
+        this.length = length;
+        this.chunkSize = chunkSize;
+        this.data = data;
     }
 
-    public Integer getId() {
-        return id;
+    public long get_id() {
+        return _id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void set_id(long _id) {
+        this._id = _id;
     }
 
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
+    public Integer getChunkSize() {
+        return chunkSize;
+    }
+
+    public void setChunkSize(Integer chunkSize) {
+        this.chunkSize = chunkSize;
+    }
+
+    public Byte getData() {
+        return data;
+    }
+
+    public void setData(Byte data) {
+        this.data = data;
+    }
 }

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +27,14 @@ public class FileController {
 
     @Autowired
     private FileStorageService fileStorageService;
-
-    private FileRepository fileRepository;
-
-    public FileController(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
-
-    @GetMapping("/all")
-    public List<Files> getAll() {
-        return fileRepository.findAll();
-    }
+//
+//    @GetMapping("/all")
+//    public List<Files> getAll() {
+//        return fileRepository.findAll();
+//    }
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         String fileName = fileStorageService.storeFile(file);
 
         System.out.println("post here");
@@ -49,17 +44,18 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
+
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
 
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
-    }
+//    @PostMapping("/uploadMultipleFiles")
+//    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+//        return Arrays.asList(files)
+//                .stream()
+//                .map(file -> uploadFile(file))
+//                .collect(Collectors.toList());
+//    }
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
